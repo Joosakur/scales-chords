@@ -6,8 +6,12 @@
     "jsRules": {},
     "rules": {
         "interface-name": [false],
+        "member-ordering": false,
         "no-console": [false],
-        "quotemark": [true, "single"]
+        "no-shadowed-variable": false,
+        "object-literal-sort-keys": false,
+        "quotemark": [true, "single"],
+        "semicolon": [true, "never"]
     },
     "rulesDirectory": []
 }
