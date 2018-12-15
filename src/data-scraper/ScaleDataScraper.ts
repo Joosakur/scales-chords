@@ -1,24 +1,27 @@
-import request from 'superagent'
-import {parse} from 'node-html-parser';
 import fs from 'fs'
+import {parse} from 'node-html-parser'
+import request from 'superagent'
 
 export default class ScaleDataScraper {
 
     public produceMappings = async (scaleNumbers: number []) => {
         const numberToNames: {
-            [scaleNumber: number]: string []
+            [scaleNumber: number]: string [],
         } = {}
 
         const nameToNumbers: {
-            [scaleName: string]: number []
+            [scaleName: string]: number [],
         } = {}
 
-        for (let scaleNumber of scaleNumbers) {
+        for (const scaleNumber of scaleNumbers) {
             const scaleNames = await this.getScaleNames(scaleNumber)
             numberToNames [scaleNumber] = scaleNames
-            for (let scaleName of scaleNames) {
-                if (nameToNumbers [scaleName]) nameToNumbers [scaleName].push(scaleNumber)
-                else nameToNumbers [scaleName] = [scaleNumber]
+            for (const scaleName of scaleNames) {
+                if (nameToNumbers [scaleName]) {
+                    nameToNumbers [scaleName].push(scaleNumber)
+                } else {
+                    nameToNumbers [scaleName] = [scaleNumber]
+                }
             }
         }
 
@@ -47,12 +50,12 @@ export default class ScaleDataScraper {
         return parse(htmlText)
     }
 
-    private parseScaleName: (root: any) => string = root => {
+    private parseScaleName: (root: any) => string = (root) => {
         const scaleTitle = root.querySelector('body .container h1')
         return scaleTitle.text.match(/"(.*)"/) [1]
     }
 
-    private parseScaleNameAlternatives: (root: any) => string = root => {
+    private parseScaleNameAlternatives: (root: any) => string = (root) => {
         const scaleSubTitle = root.querySelectorAll('body .container p') [1]
         const nameList = scaleSubTitle.text.match(/Also known as: (.*)/) [1]
         return nameList.split(', ')
