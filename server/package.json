@@ -4,8 +4,9 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "adhoc": "node dist/adhoc.js",
+    "adhoc": "tsc && node dist/scripts/adhoc.js",
     "build-ts": "tsc",
+    "data-scrape": "tsc && node dist/scripts/data-scraper.js",
     "lint": "tslint src/**/*.ts",
     "lint:fix": "tslint --fix src/**/*.ts",
     "start": "npm run serve",

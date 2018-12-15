@@ -52,12 +52,16 @@ export default class ScaleDataScraper {
 
     private parseScaleName: (root: any) => string = (root) => {
         const scaleTitle = root.querySelector('body .container h1')
-        return scaleTitle.text.match(/"(.*)"/) [1]
+        const match = scaleTitle.text.match(/"(.*)"/)
+        return match ? match [1] : scaleTitle.text
     }
 
     private parseScaleNameAlternatives: (root: any) => string = (root) => {
         const scaleSubTitle = root.querySelectorAll('body .container p') [1]
-        const nameList = scaleSubTitle.text.match(/Also known as: (.*)/) [1]
-        return nameList.split(', ')
+        const match = scaleSubTitle.text.match(/Also known as: (.*)/)
+        if (!match) { return [] }
+
+        const nameList = match[1]
+        return nameList ? nameList.split(', ') : []
     }
 }
