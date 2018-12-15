@@ -6,7 +6,7 @@
   "scripts": {
     "adhoc": "tsc && node dist/scripts/adhoc.js",
     "build-ts": "tsc",
-    "data-scrape": "tsc && node dist/scripts/data-scraper.js",
+    "scrape-data": "tsc && node dist/scripts/scrape-data.js",
     "lint": "tslint src/**/*.ts",
     "lint:fix": "tslint --fix src/**/*.ts",
     "start": "npm run serve",

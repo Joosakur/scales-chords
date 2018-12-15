@@ -2,66 +2,82 @@ import fs from 'fs'
 import {parse} from 'node-html-parser'
 import request from 'superagent'
 
+interface OriginalScaleData {
+    tones: number []
+    modes: number []
+    symmetries: number []
+    imperfections: number []
+    names: string []
+}
+
+interface ScaleDataResponse {
+    [scaleNumber: string]: OriginalScaleData
+}
+
+interface ScaleData {
+    scaleNumber: number,
+    names: string [],
+    modes: number []
+}
+
+const writeOptions = { encoding: 'utf8' }
+
 export default class ScaleDataScraper {
 
-    public produceMappings = async (scaleNumbers: number []) => {
-        const numberToNames: {
-            [scaleNumber: number]: string [],
-        } = {}
+    public produceMappings = async () => {
+        const scales: ScaleData [] = Object.entries((await this.getDataFromGithub()))
+            .map(this.mapToHeptatonicScaleData)
+            .filter(Boolean)
 
-        const nameToNumbers: {
-            [scaleName: string]: number [],
-        } = {}
-
-        for (const scaleNumber of scaleNumbers) {
-            const scaleNames = await this.getScaleNames(scaleNumber)
-            numberToNames [scaleNumber] = scaleNames
-            for (const scaleName of scaleNames) {
-                if (nameToNumbers [scaleName]) {
-                    nameToNumbers [scaleName].push(scaleNumber)
-                } else {
-                    nameToNumbers [scaleName] = [scaleNumber]
-                }
-            }
-        }
-
-        const numberToNamesJson = JSON.stringify(numberToNames)
-        const nameToNumbersJson = JSON.stringify(nameToNumbers)
-        const writeOptions = { encoding: 'utf8' }
         if (!fs.existsSync('data')) {
             fs.mkdirSync('data')
         }
-        fs.writeFileSync('data/numberToNames.json', numberToNamesJson, writeOptions)
-        fs.writeFileSync('data/namesToNumbers.json', nameToNumbersJson, writeOptions)
+
+        this.writeMappingsTofiles(scales)
     }
 
-    public getScaleNames = async (scaleNumber: number) => {
-        const htmlRoot = await this.getHtmlForScaleNumber(scaleNumber)
-        const name = this.parseScaleName(htmlRoot)
-        const altNames = this.parseScaleNameAlternatives(htmlRoot)
+    private mapToHeptatonicScaleData = (entry: [string, OriginalScaleData]) => {
+        const [ scaleNum, data ] = entry
+        if (data.tones.length !== 7) { return null }
 
-        return [name, ...altNames]
+        const scaleNumber = parseInt(scaleNum, 10)
+        return {
+            scaleNumber,
+            names: data.names,
+            modes: data.modes,
+        }
     }
 
-    private getHtmlForScaleNumber = async (scaleNumber: number) => {
-        const url = `https://ianring.com/musictheory/scales/${scaleNumber}`
-        const response = await request.get(url)
-        const htmlText: string = response.text
-        return parse(htmlText)
+    private getDataFromGithub: () => Promise<ScaleDataResponse> = async () => {
+        const url = 'https://raw.githubusercontent.com/ianring/PHPMusicTools' +
+            '/master/src/PHPMusicTools/scales/scales.json'
+        const responseJson = (await request.get(url)).text
+        return JSON.parse(responseJson)
     }
 
-    private parseScaleName: (root: any) => string = (root) => {
-        const scaleTitle = root.querySelector('body .container h1')
-        const match = scaleTitle.text.match(/"(.*)"/)
-        return match ? match [1] : scaleTitle.text
+    private writeMappingsTofiles = (scales: ScaleData []) => {
+        const numberToNames: {
+            [scaleNumber: number]: string [],
+        } = {}
+        const numberToModes: {
+            [scaleNumber: number]: number [],
+        } = {}
+        const nameToNumbers: {
+            [scaleName: string]: number,
+        } = {}
+
+        for (const scale of scales) {
+            const { scaleNumber, names, modes } = scale
+            numberToNames [scaleNumber] = names
+            numberToModes [scaleNumber] = modes
+            for (const name of names) {
+                nameToNumbers [name] = scaleNumber
+            }
+        }
+
+        fs.writeFileSync('data/numberToNames.json', JSON.stringify(numberToNames), writeOptions)
+        fs.writeFileSync('data/numberToModes.json', JSON.stringify(numberToModes), writeOptions)
+        fs.writeFileSync('data/namesToNumbers.json', JSON.stringify(nameToNumbers), writeOptions)
     }
 
-    private parseScaleNameAlternatives: (root: any) => string = (root) => {
-        const scaleSubTitle = root.querySelectorAll('body .container p') [1]
-        const match = scaleSubTitle.text.match(/Also known as: (.*)/)
-        if (!match) { return [] }
-
-        const nameList = match[1]
-        return nameList ? nameList.split(', ') : []
-    }
 }
