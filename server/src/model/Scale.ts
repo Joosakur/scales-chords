@@ -54,4 +54,37 @@ export default class Scale {
 
         return str
     }
+
+    public getTones: () => Tone [] = () => {
+        const tones: Tone [] = []
+        let base = this.root.base
+        tones.push(this.root)
+        let prevSemis = this.root.semitones
+        for (const interval of this.type.numericIntervals) {
+            const targetSemis = (prevSemis + interval.getSemitones()) % 12
+            base = base.next()
+            let requiredQualifier = targetSemis - base.semitones
+            if (requiredQualifier < -6) requiredQualifier += 12
+
+            if (requiredQualifier < -2 || requiredQualifier > 2)
+                throw new Error('Cannot form key signature, scale may not be even enough or root was chosen poorly')
+
+            tones.push(new Tone(base, new ToneQualifier(requiredQualifier)))
+            prevSemis = targetSemis
+        }
+
+        return tones
+    }
+
+    public getToneQualifiersFromC: () => ToneQualifier [] = () => {
+        const tones = this.getTones()
+        while (tones [0].base.name !== 'C') {
+            tones.push(tones.shift())
+        }
+        return tones.map(tone => tone.qualifier)
+    }
+
+    public getToneQualifiersFromRoot: () => ToneQualifier [] = () => {
+        return this.getTones().map(tone => tone.qualifier)
+    }
 }

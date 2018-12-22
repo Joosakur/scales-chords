@@ -34,4 +34,15 @@ describe('Scale', () => {
         })
     })
 
+    describe('getToneQualifiers', () => {
+        it('should give a list of tone qualifiers, starting from C', () => {
+            expect(Scale.fromToneStrings(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
+                .getToneQualifiersFromC()
+                .map(qualifier => qualifier.semitones)).to.deep.equal([0, 0, 0, 0, 0, 0, 0])
+
+            expect(Scale.fromToneStrings(['D#', 'E#', 'F#', 'Gx', 'A#', 'B', 'C'])
+                .getToneQualifiersFromC()
+                .map(qualifier => qualifier.semitones)).to.deep.equal([0, 1, 1, 1, 2, 1, 0])
+        })
+    })
 })

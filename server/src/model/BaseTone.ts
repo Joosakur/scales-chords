@@ -43,4 +43,8 @@ export default class BaseTone {
 
     public toString = () => this.name
 
+    public next = () => {
+        const index = BaseTone.keys.findIndex(({name}) => name === this.name)
+        return BaseTone.fromNumber((index + 1) % 7)
+    }
 }
