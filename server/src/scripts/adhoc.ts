@@ -1,4 +1,4 @@
-import Scale from '../model/Scale'
+import Scale from '../models/Scale'
 
 const scale1 = Scale.fromToneStrings(['C', 'D', 'E', 'F', 'G', 'A', 'B'])
 console.log(scale1.toString())
