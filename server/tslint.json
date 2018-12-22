@@ -5,7 +5,9 @@
     ],
     "jsRules": {},
     "rules": {
-        "interface-name": [false],
+        "curly": false,
+        "arrow-parens": [true, "ban-single-arg-parens"],
+        "interface-name": false,
         "member-ordering": false,
         "no-console": [false],
         "no-shadowed-variable": false,

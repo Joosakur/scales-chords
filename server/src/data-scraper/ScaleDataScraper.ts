@@ -69,9 +69,9 @@ export default class ScaleDataScraper {
         for (const scale of scales) {
             const { scaleNumber, names, modes } = scale
             const asciiNames = names.map(name => name
-                .replace(/[\u266d]/g,'b')
-                .replace(/[\u266e]/g,'natural ')
-                .replace(/[\u266f]/g,'#')
+                .replace(/[\u266d]/g, 'b')
+                .replace(/[\u266e]/g, 'natural ')
+                .replace(/[\u266f]/g, '#'),
             )
 
             numberToNames [scaleNumber] = asciiNames
