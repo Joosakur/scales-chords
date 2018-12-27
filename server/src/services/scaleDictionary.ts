@@ -13,7 +13,7 @@ const queryScalesByName: (name: string) => ScaleListEntry [] = (name: string) =>
         if (nameMatches(name, scaleName)) {
             list.push({
                 name: scaleName,
-                scaleNumber: namesToNumbers [scaleName]
+                scaleNumber: namesToNumbers [scaleName],
             })
         }
         return list
@@ -31,5 +31,5 @@ const nameMatches = (n1: string, n2: string) => {
 }
 
 export default {
-    queryScalesByName
+    queryScalesByName,
 }

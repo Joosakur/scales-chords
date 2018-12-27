@@ -1,3 +1,3 @@
-export default interface HttpStatusError {
+export default interface HttpStatusError extends Error {
     status: number
 }

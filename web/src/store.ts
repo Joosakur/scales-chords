@@ -1,10 +1,13 @@
 import { Store } from 'react-redux'
-import rootReducer, {initialState} from './reducers/root'
 import { applyMiddleware, createStore } from 'redux'
+import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import rootReducer, {initialState} from './reducers/root'
 import { RootState } from './types'
 
-const middleware: any [] = []
+const middleware: any [] = [
+    thunk,
+]
 
 const composedEnhancers = composeWithDevTools(
     applyMiddleware(...middleware),

@@ -1,5 +1,5 @@
 import scaleReducer from './scale'
-import { RootAction } from '../actions/types'
+import { RootAction } from '../actions'
 import { RootState } from '../types'
 
 export const initialState: RootState = {
@@ -9,6 +9,7 @@ export const initialState: RootState = {
             results: [],
             isLoading: false,
         },
+        details: null,
     },
 }
 

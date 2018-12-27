@@ -6,7 +6,8 @@ import 'semantic-ui-css/semantic.min.css'
 import './App.css'
 
 import store from './store'
-import ScaleSegment from './components/ScaleSegment'
+import ScaleSearch from './components/ScaleSearch'
+import ScaleView from './components/ScaleView'
 
 class App extends React.Component {
   public render() {
@@ -14,7 +15,8 @@ class App extends React.Component {
         <Provider store={store}>
             <Container text style={{ padding: '2em 0em' }} >
                 <Header as='h1'>Scales and Chords</Header>
-                <ScaleSegment/>
+                <ScaleSearch/>
+                <ScaleView/>
             </Container>
         </Provider>
     )

@@ -1,9 +1,9 @@
 import HttpStatusError from './HttpStatusError'
 
 class NotFoundError extends Error implements HttpStatusError {
-    readonly status: number
+    public readonly status: number
 
-    constructor (msg: string) {
+    constructor(msg: string) {
         super(msg)
         this.status = 404
     }
