@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import ScaleListEntry from '../rest-models/ScaleListEntry'
+import { ScaleListEntry } from '../rest/models'
 
 const namesToNumbers: { [name: string]: number } = JSON.parse(
     fs.readFileSync('data/namesToNumbers.json', {encoding: 'utf8'}),

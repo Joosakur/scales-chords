@@ -5,6 +5,8 @@ export interface RootState {
 export interface ScaleState {
     readonly search: ScaleSearchState
     readonly details: ScaleDetails | null
+    readonly root: QualifiedTone
+    readonly scaleNumber: number | null
 }
 
 export interface ScaleSearchState {
@@ -21,5 +23,14 @@ export interface ScaleListEntry {
 export interface ScaleDetails {
     namePrimary: string
     nameSecondaries: string []
-    scaleNumber: number
+    scaleNumber: number,
+    tones: QualifiedTone []
 }
+
+export interface QualifiedTone {
+    base: BaseTone,
+    qualifier: ToneQualifier
+}
+
+export type BaseTone = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
+export type ToneQualifier = 'bb' | 'b' | null | '#' | 'x'

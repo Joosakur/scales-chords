@@ -25,13 +25,15 @@ export default class ScaleType {
     }
 
     public static fromBinaryString = (binary: string) => {
-        if (binary.length !== 12) throw new Error('Binary string has to include all notes')
+        while (binary.length < 12) binary = '0' + binary
+        if (binary.length > 12) throw new Error('Binary string must have length of 12')
+
         let onBits = 0
         for (const char of binary) {
             if (char !== '1' && char !== '0') throw new Error('Invalid binary string')
             if (char === '1') onBits++
         }
-        if (binary.charAt(0) !== '1') throw new Error('Scale must include its root note')
+        if (binary.charAt(11) !== '1') throw new Error('Scale must include its root note')
         if (onBits !== 7) throw new Error('Scale must be heptatonic')
 
         const reversedBinary = binary.split('').reverse().join('')

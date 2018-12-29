@@ -1,6 +1,6 @@
 {
   "name": "scales-chords",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/server.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/cors": "^2.8.4",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.5",
     "@types/superagent": "^3.8.5",
@@ -30,6 +31,7 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "node-html-parser": "^1.1.11",
     "superagent": "^4.0.0"

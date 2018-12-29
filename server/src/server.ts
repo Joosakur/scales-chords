@@ -1,23 +1,27 @@
+import cors from 'cors'
 import express from 'express'
 
-import scales from './endpoints/scales'
-import scaleTypes from './endpoints/scaleTypes'
 import HttpStatusError from './errors/HttpStatusError'
+import declareEndpoints from './rest/endpoints'
 
 const app = express()
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-    next()
-})
+const corsOptions: cors.CorsOptions = {
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+    credentials: true,
+    methods: 'GET,HEAD,OPTIONS',
+    preflightContinue: false,
+}
 
-app.get('/', (req, res) => res.send('Hello World!'))
-scaleTypes(app)
-scales(app)
+app.use(cors(corsOptions))
+
+declareEndpoints(app)
+
+app.options('*', cors(corsOptions))
 
 app.use((err: HttpStatusError, req: express.Request, res: express.Response, next: (err: Error) => void) => {
     res.status(err.status || 500)
+    console.warn(err.stack)
     res.json({error: err.message})
 })
 

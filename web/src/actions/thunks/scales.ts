@@ -2,12 +2,14 @@ import { AnyAction } from 'redux'
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 import axios from 'axios'
 
-import { ScaleListEntry, ScaleDetails } from '../../types'
+import { QualifiedTone, ScaleListEntry, ScaleDetails } from '../../types'
+
+const HOST = process.env.REACT_APP_SERVER_HOST
 
 export const queryScales = (q: string): ThunkAction<void, {}, {}, AnyAction> => {
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>): void => {
         dispatch(queryScalesStarted())
-        axios.get(`http://localhost:3000/scale-types?name=${q}`)
+        axios.get(`${HOST}/scales?name=${q}`)
             .then(res => dispatch(queryScalesSuccess(res.data)))
             .catch(err => dispatch(queryScalesFailed()))
     }
@@ -35,10 +37,11 @@ const queryScalesFailed = (): QueryScalesFailedAction => {
     return { type: 'THUNK__SCALES__QUERY_FAILED' }
 }
 
-export const loadScale = (scaleNumber: number): ThunkAction<void, {}, {}, AnyAction> => {
+export const loadScale = (scaleNumber: number, root: QualifiedTone): ThunkAction<void, {}, {}, AnyAction> => {
+    const rootParam = `${root.base}${(root.qualifier || '').replace('x', 'ss').replace('#', 's')}`
     return (dispatch: ThunkDispatch<{}, {}, AnyAction>): void => {
         dispatch(loadScaleStarted())
-        axios.get(`http://localhost:3000/scales/${scaleNumber}`)
+        axios.get(`${HOST}/scales/${scaleNumber}/${rootParam}`)
             .then(res => dispatch(loadScaleSuccess(res.data)))
             .catch(err => dispatch(loadScaleFailed()))
     }

@@ -21,7 +21,7 @@ describe('ToneQualifier', () => {
         it('should build correct qualifiers', () => {
             expect(ToneQualifier.DoubleFlat().toString()).to.eql('bb')
             expect(ToneQualifier.Flat().toString()).to.eql('b')
-            expect(ToneQualifier.Natural().toString()).to.eql('')
+            expect(ToneQualifier.Natural().toString()).to.eql(null)
             expect(ToneQualifier.Sharp().toString()).to.eql('#')
             expect(ToneQualifier.DoubleSharp().toString()).to.eql('x')
         })

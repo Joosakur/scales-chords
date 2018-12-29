@@ -1,8 +1,12 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Header } from 'semantic-ui-react'
+import { Segment, Grid, GridColumn } from 'semantic-ui-react'
 
 import { RootState, ScaleDetails } from '../../types'
+
+import ScaleNameView from './ScaleNameView'
+import ScaleNotesView from './ScaleNotesView'
+import ScalePlayer from './ScalePlayer'
 
 export interface StateProps {
     scaleDetails: ScaleDetails | null
@@ -15,15 +19,31 @@ export const ScaleView: React.FunctionComponent<Props> = props => {
 
     if (!scaleDetails) return null
 
+    const { namePrimary, nameSecondaries, tones } = scaleDetails
+
     return (
-        <React.Fragment>
-            <Header as='h2'>
-                Scale: {scaleDetails.namePrimary}
-                { scaleDetails.nameSecondaries.length > 0 &&
-                    <Header.Subheader>Also known as: {scaleDetails.nameSecondaries.join(', ')}</Header.Subheader>
+        <Segment>
+            <Grid>
+                <GridColumn width={12}>
+                    <ScaleNameView primaryName={namePrimary} secondaryNames={nameSecondaries}/>
+                </GridColumn>
+                <GridColumn width={4} textAlign='right'>
+                    <ScalePlayer notes={tones}/>
+                </GridColumn>
+                {
+                    tones && tones.length > 0 ?
+                        (
+                            <GridColumn width={16}>
+                                <ScaleNotesView notes={tones}/>
+                            </GridColumn>
+                        ) :
+                        (
+                            <p>Could not form the scale presentation, try
+                                some other enharmonically equivalent root</p>
+                        )
                 }
-            </Header>
-        </React.Fragment>
+            </Grid>
+        </Segment>
     )
 }
 

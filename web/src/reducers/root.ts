@@ -10,6 +10,11 @@ export const initialState: RootState = {
             isLoading: false,
         },
         details: null,
+        root: {
+            base: 'C',
+            qualifier: null,
+        },
+        scaleNumber: null,
     },
 }
 

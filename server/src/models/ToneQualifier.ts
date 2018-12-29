@@ -1,3 +1,5 @@
+export type ToneQualifierString = 'bb' | 'b' | null | '#' | 'x'
+
 export default class ToneQualifier {
 
     public static DoubleFlat = () => new ToneQualifier(-2)
@@ -20,6 +22,7 @@ export default class ToneQualifier {
                 return ToneQualifier.DoubleFlat()
             case 'b':
                 return ToneQualifier.Flat()
+            case null:
             case '':
                 return ToneQualifier.Natural()
             case '#':
@@ -31,14 +34,14 @@ export default class ToneQualifier {
         }
     }
 
-    public toString: () => string = () => {
+    public toString: () => ToneQualifierString = () => {
         switch (this.semitones) {
             case -2:
                 return 'bb'
             case -1:
                 return 'b'
             case 0:
-                return ''
+                return null
             case 1:
                 return '#'
             case 2:

@@ -21,6 +21,6 @@ export default class Tone {
     }
 
     public toString = () => {
-        return this.base.toString() + this.qualifier.toString()
+        return this.base.toString() + (this.qualifier.toString() || '')
     }
 }

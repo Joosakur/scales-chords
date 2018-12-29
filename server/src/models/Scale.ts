@@ -65,9 +65,11 @@ export default class Scale {
             base = base.next()
             let requiredQualifier = targetSemis - base.semitones
             if (requiredQualifier < -6) requiredQualifier += 12
+            if (requiredQualifier > 6) requiredQualifier -= 12
 
-            if (requiredQualifier < -2 || requiredQualifier > 2)
+            if (requiredQualifier < -2 || requiredQualifier > 2) {
                 throw new Error('Cannot form key signature, scale may not be even enough or root was chosen poorly')
+            }
 
             tones.push(new Tone(base, new ToneQualifier(requiredQualifier)))
             prevSemis = targetSemis

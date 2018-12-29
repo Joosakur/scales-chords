@@ -1,4 +1,8 @@
-import { UIScaleAction } from './ui/scale'
+import {
+    ScaleSearchInputChangedAction,
+    ScaleRootSelectedAction,
+    ScaleTypeSelectedAction,
+} from './scale'
 import {
     QueryScalesSuccessAction,
     QueryScalesFailedAction,
@@ -9,6 +13,8 @@ import {
 } from './thunks/scales'
 
 export type RootAction =
-    UIScaleAction |
+    ScaleSearchInputChangedAction |
+    ScaleRootSelectedAction |
+    ScaleTypeSelectedAction |
     QueryScalesStartedAction | QueryScalesSuccessAction | QueryScalesFailedAction |
     LoadScaleStartedAction | LoadScaleSuccessAction | LoadScaleFailedAction

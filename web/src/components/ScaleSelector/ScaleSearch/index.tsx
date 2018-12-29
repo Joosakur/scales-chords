@@ -3,22 +3,25 @@ import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux'
 import { Search, SearchProps, Segment } from 'semantic-ui-react'
 
-import { RootState, ScaleListEntry } from '../../types'
-import { scaleSearchInputChanged } from '../../actions/ui/scale'
-import { queryScales, loadScale } from '../../actions/thunks/scales'
-
-export interface DispatchProps {
-    scaleSearchInputChanged: (value: string) => any,
-    scaleSelected: (scaleNumber: number) => any
-}
+import { RootState, ScaleListEntry } from '../../../types'
+import { scaleSearchInputChanged } from '../../../actions/scale'
+import { queryScales } from '../../../actions/thunks/scales'
 
 export interface StateProps {
     isLoading: boolean,
     value: string,
-    results: ScaleListEntry [],
+    results: ScaleListEntry []
 }
 
-type Props = StateProps & DispatchProps
+export interface DispatchProps {
+    changeScaleSearchInput: (value: string) => any,
+}
+
+export interface OwnProps {
+    onScaleTypeSelected: (scaleNumber: number) => void
+}
+
+type Props = StateProps & DispatchProps & OwnProps
 
 interface SearchResult {
     title: string,
@@ -26,15 +29,15 @@ interface SearchResult {
 }
 
 export const ScaleSearch: React.FunctionComponent<Props> = props => {
-    const { isLoading, value, results, scaleSearchInputChanged, scaleSelected } = props
+    const { isLoading, value, results, changeScaleSearchInput, onScaleTypeSelected } = props
 
     const handleSearchChange = (e: any, obj: SearchProps) => {
-        scaleSearchInputChanged(obj.value ? obj.value.toString() : '')
+        changeScaleSearchInput(obj.value ? obj.value.toString() : '')
     }
 
     const handleResultSelect: (e: any, obj: { result: SearchResult }) => void = (e, { result }) => {
-        scaleSelected(result.num)
-        scaleSearchInputChanged('')
+        onScaleTypeSelected(result.num)
+        changeScaleSearchInput('')
     }
 
     const getFormattedResults = (): SearchResult [] => results.map(
@@ -42,15 +45,16 @@ export const ScaleSearch: React.FunctionComponent<Props> = props => {
     )
 
     return (
-        <Segment vertical>
-            <Search
-                loading={isLoading}
-                onResultSelect={handleResultSelect}
-                onSearchChange={handleSearchChange}
-                results={getFormattedResults()}
-                value={value}
-            />
-        </Segment>
+        <Search
+            loading={isLoading}
+            onResultSelect={handleResultSelect}
+            onSearchChange={handleSearchChange}
+            results={getFormattedResults()}
+            value={value}
+            fluid
+            size={'large'}
+            className='full-width-search'
+        />
     )
 }
 
@@ -64,12 +68,9 @@ function mapStateToProps(state: RootState): StateProps {
 
 function mapDispatchToProps(dispatch: ThunkDispatch<{}, {}, any>): DispatchProps {
     return {
-        scaleSearchInputChanged: (value: string) => {
+        changeScaleSearchInput: (value: string) => {
             dispatch(scaleSearchInputChanged(value))
             if (value.length > 0) dispatch(queryScales(value))
-        },
-        scaleSelected: (scaleNumber: number) => {
-            dispatch(loadScale(scaleNumber))
         },
     }
 }

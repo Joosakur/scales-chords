@@ -1,4 +1,5 @@
-interface Key { name: string, semitones: number }
+export type BaseToneString = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B'
+interface Key { name: BaseToneString, semitones: number }
 
 export default class BaseTone {
 
@@ -13,10 +14,10 @@ export default class BaseTone {
     ]
 
     public readonly num: number
-    public readonly name: string
+    public readonly name: BaseToneString
     public readonly semitones: number
 
-    private constructor(num: number, name: string, semitones: number) {
+    private constructor(num: number, name: BaseToneString, semitones: number) {
         this.num = num
         this.name = name
         this.semitones = semitones
